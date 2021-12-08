@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.generic import ListView, CreateView, UpdateView
@@ -91,4 +92,5 @@ def change_status(request):
     medicamento.save()
     response = JsonResponse({'mensaje': 'Exito!!'})
     response.status_code = 200
+    messages.success(request,"Se cambio el estado del medicamento: "+medicamento.nombre)
     return response

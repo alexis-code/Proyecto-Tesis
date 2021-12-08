@@ -1,18 +1,20 @@
-from django.http import request, response, JsonResponse
+from django.forms.models import model_to_dict
+from django.http import response, JsonResponse
 from django.urls.base import reverse_lazy
-from django.shortcuts import redirect, render, get_object_or_404, resolve_url
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.base import TemplateResponseMixin, View
-from django.views.generic.edit import UpdateView
-from django.db import models, transaction
+from django.views.generic.base import View
+from django.views.generic.edit import CreateView, UpdateView
+from django.db import transaction
 from datetime import date, datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib import messages
 
 from .forms import EvolucionForms
 from ..resultadocultivo.forms import ResultadoCultivoForms
-from django.views.generic import ListView, CreateView, DetailView, View
+from django.views.generic import ListView, DetailView, View
 from ..historiaclinica.models import HistoriaClinica
 from .models import Evolucion, det_cultivo_evolucion, det_tratmiento_evolucion
 from ..cultivo.models import Cultivo
@@ -20,7 +22,6 @@ from ..medicamento.models import Medicamento
 from ..examenfisico.models import ExamenFisico
 from ..resultadolaboratorio.models import ResultadoLab
 from ..resultadocultivo.models import ResultadoCultivo
-from his.settings import base
 import json
 #import django_excel as excel
 
@@ -52,6 +53,8 @@ class EvolucionListbyFecha(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     def get_queryset(self):
         fecha_desde = self.request.GET['fecha_desde']
         fecha_hasta = self.request.GET['fecha_hasta']
+        if fecha_desde > fecha_hasta:
+            messages.error(self.request,"El rango de fecha es incorrecto!")
         fecha_desde = fecha_desde + " 00:00:00"
         fecha_hasta = fecha_hasta + " 23:59:59"
         cod_hc = self.request.GET['cod_hc']
@@ -137,6 +140,7 @@ def change_status(request):
         evolucion.save()
     id = evolucion.id_historiaclinicaFK_id
     data = id
+    messages.success(request,"Se cambio de estado.")
     return response.HttpResponse(data)
 
 
@@ -268,6 +272,11 @@ class EvolucionDetailCreate(LoginRequiredMixin,PermissionRequiredMixin,DetailVie
                         evolucion.plan = request.POST['plan']
                         evolucion.save()
 
+                        historia = HistoriaClinica.objects.get(id_historiaPK = evolucion.id_historiaclinicaFK_id)
+                        if historia.estado == "Inactivo":
+                            historia.estado = "Activo"
+                            historia.save()
+
                         for i in cultivo_list['cultivos']:
                             cultivo = Cultivo()
                             cultivo.nombre = i['nombre']
@@ -288,10 +297,11 @@ class EvolucionDetailCreate(LoginRequiredMixin,PermissionRequiredMixin,DetailVie
                             det_tratamiento.indicacion = i['indicacion']
                             det_tratamiento.save()
                         data = {'id':evolucion.id_historiaclinicaFK_id}
+                        messages.success(request,"Se registro una evolución correctamente!")
                 except Exception as e:
-                    data['error'] = str(e)
+                    messages.error(request,"Ha ocurrido un error: " + str(e) + ", contacte a su administrador del sistema.")
         except Exception as e:
-            data['error'] = str(e)
+            messages.error(request,"Ha ocurrido un error: " + str(e) + ", contacte a su administrador del sistema.")
         return JsonResponse(data,safe=False)
 
 
@@ -315,7 +325,7 @@ class EvolucionUpdate(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
             action = request.POST['action']
             if action == "search_medicamentos":
                 data = []
-                for i in Medicamento.objects.filter(nombre__icontains=request.POST['term']):
+                for i in Medicamento.objects.filter(nombre__icontains=request.POST['term'],estado="Activo"):
                     item = i.toJSON()
                     item['value'] = i.nombre
                     data.append(item)
@@ -436,9 +446,9 @@ class EvolucionUpdate(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
                             det_tratamiento.indicacion = i['indicacion']
                             det_tratamiento.save()
                         data = {'id':evolucion.id_historiaclinicaFK_id}
+                        messages.success(request,"La evolución se edito correctamente!")
                 except Exception as e:
-                    data['error'] = str(e)
-                    print(str(e))
+                    messages.error(request,"Ha ocurrido un error: " + str(e) + ", contacte a su administrador del sistema.")
             if action == "add_resultcultivo":
                 try:
                     resultado = ResultadoCultivo()
@@ -467,15 +477,15 @@ class EvolucionUpdate(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
                         'estado':estado
                     }
                 except Exception as e:
-                    data['error'] = str(e)
+                    messages.error(request,"Ha ocurrido un error: " + str(e) + ", contacte a su administrador del sistema.")
         except Exception as e:
-            data['error'] = str(e)
+            messages.error(request,"Ha ocurrido un error: " + str(e) + ", contacte a su administrador del sistema.")
         return JsonResponse(data,safe=False)
 
     def get_detail_cultivo(self):
         data = []
         try:
-            for i in det_cultivo_evolucion.objects.filter(id_evolucionFK_id=self.get_object().id_evolucionPK, estado="En Curso"):
+            for i in det_cultivo_evolucion.objects.filter(id_evolucionFK_id=self.get_object().id_evolucionPK):
                 item = i.id_cultivoFK.toJSON()
                 item['id_evolucionFK'] = i.id_evolucionFK_id
                 item['fecha'] = str(i.fecha.strftime('%Y-%m-%d'))
@@ -512,13 +522,76 @@ class DetalleEvolucion(LoginRequiredMixin,PermissionRequiredMixin,View):
             context = {
                 'evolucion':Evolucion.objects.get(id_evolucionPK=self.kwargs['pk']),
                 'nro_area': 2,
-                'direccion': '3er. Anillo Externo, Av. Japón, entre Av. Canal Cotoca y Av. Paraguá – Telef. Piloto: 3-462037',
-                'ciudad': 'Santa Cruz de la Sierra - Bolivia',
+                'direccion': 'Av. San Martin de Porres',
+                'ciudad': 'Comarapa - Santa Cruz - Bolivia',
             }
             return render(request,'evolucionapp/detalle.html',context)
         except Exception as e:
             print(str(e))
         return response.HttpResponseRedirect(reverse_lazy('indexHistoriaC'))
+
+class CultivoSolicitadoListEnCurso(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+    permission_required=("cultivo.view_cultivo")
+    model = det_cultivo_evolucion
+    template_name = 'evolucionapp/indexCultivo.html'
+
+    def get_queryset(self):
+        fk = self.kwargs['fk']
+        return self.model.objects.filter(id_evolucionFK=fk, estado="En Curso")
+    
+    def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       id = self.kwargs['fk']
+       context['id'] = id
+       return context
+
+class CultivoSolicitadoListRegistrado(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+    permission_required=("cultivo.view_cultivo")
+    model = det_cultivo_evolucion
+    template_name = 'evolucionapp/indexCultivo.html'
+
+    def get_queryset(self):
+        fk = self.kwargs['fk']
+        return self.model.objects.filter(id_evolucionFK=fk, estado="Registrado")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = self.kwargs['fk']
+        context['id'] = id
+        return context
+
+def registrar_result_cultivo(request):
+    try:
+        resultado = ResultadoCultivo()
+        resultado.id_cultivoFK_id = request.POST['id_cultivoFK']
+        resultado.id_evolucionFK_id = request.POST['id_evolucionFK']
+        if request.POST['resultado_probable'] == '1':
+            resultado.resultado_probable = "No se aislo ningun patogeno"
+        elif request.POST['resultado_probable'] == '2':
+            resultado.resultado_probable = "Se asilo patogeno"
+        resultado.patogeno = request.POST['patogeno']
+        resultado.sensible = request.POST['sensible']
+        resultado.resistente = request.POST['resistente']
+        resultado.parcial_sensible = request.POST['parcial_sensible']
+        resultado.comentario = request.POST['comentario']
+        resultado.medico = request.POST['medico']
+        resultado.estado = 'Activo'
+        print(resultado.comentario)
+        resultado.save()
+
+        cultivo = det_cultivo_evolucion.objects.get(id_cultivoFK_id = resultado.id_cultivoFK_id)
+        cultivo.estado = "Registrado"
+        cultivo.save()
+        id_cultivo = resultado.id_cultivoFK_id
+        estado = cultivo.estado
+        data = {
+            'id_cultivo':id_cultivo,
+            'estado':estado
+        }
+        messages.success(request,"Los resultados fueron registrados exitosamente!")
+    except Exception as e:
+        messages.error(request,"error:"+str(e))
+    return JsonResponse(data,safe=False)
 
 
 class ResultadoCultivoList(LoginRequiredMixin,PermissionRequiredMixin,ListView):
@@ -569,8 +642,7 @@ class UpdateResultCultivo(UpdateView,PermissionRequiredMixin,LoginRequiredMixin)
                 result_cultivo.save()
         except Exception as e:
             data['error'] = str(e)
-            print(str(e))
-        return redirect('/evolucion/result_cultivo/'+ request.POST['id_evolucionFK'])
+        return redirect('/evolucion/cultivo/resultados/'+ request.POST['id_evolucionFK'])
 
 @login_required
 @permission_required("resultadocultivo.change_resultadocultivo")
@@ -585,6 +657,7 @@ def change_status_cultivo(request):
         else:
             resultCultivo.estado = 'Activo'
             resultCultivo.save()
+        messages.success(request,"Se cambio de estado.")
         return JsonResponse(data)
     except Exception as e:
         data = str(e)
@@ -595,6 +668,8 @@ def change_status_cultivo(request):
 def generar_estadistica_fisico(request):
     fecha_desde = request.POST['fecha_desde']
     fecha_hasta = request.POST['fecha_hasta']
+    if fecha_desde > fecha_hasta:
+        messages.error(request,"El rango de fecha solicitado es incorrecto!")
     pk = request.POST['pk']
     data = {}
     datos_fc = []
@@ -615,7 +690,7 @@ def generar_estadistica_fisico(request):
     datos_peso = []
     dias = []
     try:
-        for exam in Evolucion.objects.filter(id_historiaclinicaFK = pk, estado = 'Activo', fecha_hora__range=(fecha_desde,fecha_hasta) ,id_examenfisicoFK__isnull=False).order_by('fecha_hora'):
+        for exam in Evolucion.objects.filter(id_historiaclinicaFK = pk, estado = 'Activo', fecha_hora__range=(str(fecha_desde + " 00:00:00"),str(fecha_hasta + " 23:59:59")) ,id_examenfisicoFK__isnull=False).order_by('fecha_hora'):
             datos_fc.append(float(exam.id_examenfisicoFK.frecuencia_cardiaca))
             datos_fr.append(float(exam.id_examenfisicoFK.frecuencia_respiratoria))
             datos_tempax.append(float(exam.id_examenfisicoFK.temp_ax))
@@ -662,6 +737,8 @@ def generar_estadistica_fisico(request):
 def generar_estadistica(request):
     fecha_desde = request.POST['fecha_desde']
     fecha_hasta = request.POST['fecha_hasta']
+    if fecha_desde > fecha_hasta:
+        messages.error(request,"El rango de fecha solicitado es incorrecto!")
     pk = request.POST['pk']
     data = {}
     datos_gb = []
@@ -689,8 +766,7 @@ def generar_estadistica(request):
     datos_dd = []
     dias = []
     try:
-        for labs in Evolucion.objects.filter(id_historiaclinicaFK = pk, estado = 'Activo', fecha_hora__range=(fecha_desde,fecha_hasta) ,id_resultadolabFK__isnull=False).order_by('fecha_hora'):
-            print(labs.id_resultadolabFK.lab_gb)
+        for labs in Evolucion.objects.filter(id_historiaclinicaFK = pk, estado = 'Activo', fecha_hora__range=(str(fecha_desde+" 00:00:00"),str(fecha_hasta+" 23:59:59")) ,id_resultadolabFK__isnull=False).order_by('fecha_hora'):
             datos_gb.append(float(labs.id_resultadolabFK.lab_gb))
             datos_hb.append(float(labs.id_resultadolabFK.lab_hb))
             datos_ph.append(float(labs.id_resultadolabFK.lab_ph))
@@ -716,7 +792,6 @@ def generar_estadistica(request):
             datos_dd.append(float(labs.id_resultadolabFK.lab_dd))
             fecha_str = date.strftime(labs.fecha_hora,"%Y-%m-%d")
             dias.append(str(fecha_str))
-            print(fecha_str)
         data['datos_gb'] = datos_gb
         data['datos_hb'] = datos_hb
         data['datos_ph'] = datos_ph

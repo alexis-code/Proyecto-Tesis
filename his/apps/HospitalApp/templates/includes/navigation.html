@@ -10,7 +10,7 @@
         </button>
       </div>
       <a class="navbar-brand" href="/">
-        Hospital San Martín de Porres
+        <p style="font-size: x-large;">Hospital San Martín de Porres</p>
       </a>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false"
@@ -30,13 +30,13 @@
             </div>
             <b class="caret d-none d-lg-block d-xl-block"></b>
             <p class="d-lg-none">
-              Log out
+              Cerrar Sesión
             </p>
           </a>
           <ul class="dropdown-menu dropdown-navbar">
             <li class="nav-link"><a href="{% url 'change_password' %}" class="nav-item dropdown-item">Cambiar Contraseña</a></li>
             <li class="dropdown-divider"></li>
-            <li class="nav-link"><a href="{% url 'logout' %}" class="nav-item dropdown-item">Log out</a></li>
+            <li class="nav-link"><a href="{% url 'logout' %}" class="nav-item dropdown-item">Cerrar Sesión</a></li>
           </ul>
         </li>
         <li class="separator d-lg-none"></li>

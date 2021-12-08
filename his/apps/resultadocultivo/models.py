@@ -6,8 +6,8 @@ from simple_history.models import HistoricalRecords
 
 class ResultadoCultivo(models.Model):
     id_resultCultivoPK = models.AutoField(primary_key=True)
-    id_cultivoFK = models.ForeignKey(Cultivo, on_delete=CASCADE)
-    id_evolucionFK = models.OneToOneField(Evolucion, on_delete=CASCADE)
+    id_cultivoFK = models.OneToOneField(Cultivo, on_delete=CASCADE)
+    id_evolucionFK = models.ForeignKey(Evolucion, on_delete=CASCADE)
     medico = models.CharField('Nombre del Médico',max_length=150,blank=False,null=False, default="-")
     medico_udpated = models.CharField('Último en Modificar',max_length=150,blank=False,null=False, default="-")
     resultado_probable = models.CharField('Resultados Probables',max_length=50,blank=False,null=False)
@@ -20,6 +20,7 @@ class ResultadoCultivo(models.Model):
     history = HistoricalRecords(table_name="audit_result_cultivo")
 
     class Meta:
+        ordering = ['-id_resultCultivoPK']
         verbose_name='resultadocultivo'
         verbose_name_plural='resultadocultivos'
         db_table = 'tb_resultadoCultivo'

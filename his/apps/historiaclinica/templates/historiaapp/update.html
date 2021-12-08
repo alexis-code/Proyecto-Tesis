@@ -1,8 +1,8 @@
 {% extends 'hospitalapp/base.html' %}
 {% load static %}
-{% block tittle %}
-  <title>Historia Clínica - Hospital Japonés</title>
-{% endblock %}
+{% block title %}
+Historia Clínica|Modificar
+{% endblock title %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -25,8 +25,6 @@
                                 <label class="bmd-label-floating">Nro. de Documento*</label>
                                 <input type="number" min="0" value="{{object.id_pacienteFK.nro_documento}}" required class="form-control" name="nro_documento"/>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">Complemento*</label>
                                 <select class="form-control" name="complementario_ci" required>
@@ -39,6 +37,15 @@
                                     <option value="CH" {% if object.id_pacienteFK.complementario_ci == 'CH'%}selected{% endif %}>CH</option>
                                     <option value="PT" {% if object.id_pacienteFK.complementario_ci == 'PT'%}selected{% endif %}>PT</option>
                                     <option value="OR" {% if object.id_pacienteFK.complementario_ci == 'OR'%}selected{% endif %}>OR</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Sexo*</label>
+                                <select class="form-control" name="sexo" required>
+                                    <option value="M" {% if object.id_pacienteFK.sexo == 'M'%}selected{% endif %}>Masculino</option>
+                                    <option value="F" {% if object.id_pacienteFK.sexo == 'F'%}selected{% endif %}>Femenino</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
@@ -99,22 +106,14 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label>Sexo*</label>
-                                <select class="form-control" name="sexo" required>
-                                    <option value="M" {% if object.id_pacienteFK.sexo == 'M'%}selected{% endif %}>Masculino</option>
-                                    <option value="F" {% if object.id_pacienteFK.sexo == 'F'%}selected{% endif %}>Femenino</option>
-                                </select>
-                            </div>
                             <div class="form-group col-md-4" style="margin-top: 6%;">
                                 <label>Fecha Nacimiento*</label>
                                 <input type="date" class="form-control datetimepicker" name="fecha_nacimiento"
                                     value="{{object.id_pacienteFK.fecha_nacimiento|date:'Y-m-d' }}" required/>
                             </div>
                             <div class="form-group col-md-4" style="margin-top: 6%;">
-                                <label>Edad*</label>
-                                <input type="number" class="form-control" name="edad"
-                                    value="{{object.id_pacienteFK.edad }}" required/>
+                                <label>Edad</label>
+                                <input type="number" class="form-control" value="{{object.id_pacienteFK.edad }}" readonly/>
                             </div>
                         </div>
 
@@ -225,34 +224,34 @@
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">TA</label>
                                 <input type="text" class="form-control" name="tension_arterial"
-                                    value="{{ object.tension_arterial}}" required/>
+                                    value="{{ object.tension_arterial}}"  pattern="[/0-9]{1,15}" required/>
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">FC</label>
-                                <input type="text" class="form-control" name="frecuencia_cardiaca"
-                                    value="{{ object.frecuencia_cardiaca}}" required />
+                                <input type="text" class="form-control" type="number" step="0.01" name="frecuencia_cardiaca"
+                                    value="{{ object.frecuencia_cardiaca}}" pattern="[.0-9]{1,15}" required />
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">FR</label>
-                                <input type="text" class="form-control" name="frecuencia_respiratoria"
-                                    value="{{ object.frecuencia_respiratoria}}" required/>
+                                <input type="text" class="form-control" type="number" step="0.01" name="frecuencia_respiratoria"
+                                    value="{{ object.frecuencia_respiratoria}}" pattern="[.0-9]{1,15}" required/>
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">TEMP AX</label>
-                                <input type="text" class="form-control" name="temp_ax"
-                                    value="{{ object.temp_ax}}" required/>
+                                <input type="text" class="form-control" type="number" step="0.01" name="temp_ax"
+                                    value="{{ object.temp_ax}}" pattern="[.0-9]{1,15}" required/>
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">SAT</label>
-                                <input type="text" class="form-control" name="sindrome_at"
-                                    value="{{ object.sindrome_at}}" required/>
+                                <input type="text" class="form-control" type="number" step="0.01" name="sindrome_at"
+                                    value="{{ object.sindrome_at}}" pattern="[.0-9]{1,15}" required/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-2">
                                 <label class="bmd-label-floating">Peso</label>
-                                <input type="text" class="form-control" name="peso"
-                                    value="{{ object.peso}}" required/>
+                                <input type="text" class="form-control" type="number" step="0.01" name="peso"
+                                    value="{{ object.peso}}" pattern="[.0-9]{1,15}" required/>
                             </div>
                         </div>
                         <div class="form-row">
@@ -315,15 +314,13 @@
                     dataType: 'json',
                 }).done(function (data) {
                     response(data);
-                    console.log(data.value);
                 }).fail(function (data) {
-                    console.log(data.error);
+                    alert(data.error);
                 });
             },
             delay: 500,
             minLength: 1,
             select: function (event, ui) {
-                console.log(ui.item.nro_documento)
                 $.ajax({
                     url: "/historia/redirigir/evolucion/",
                     type: 'POST',
@@ -333,7 +330,6 @@
                     },
                     dataType: 'json',
                 }).done(function (data) {
-                    console.log(data.id_HC)
                     window.location.href = "/evolucion/create/"+data.id_HC;
                 }).fail(function (data) {
                     alert(data.error);

@@ -6,12 +6,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block tittle %}
-    <title>Indicación - Hospital Japonés</title>
-    {% endblock %}
-
+    <title>Indicacion|Detalle</title>
     <!-- Material Kit CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
+    <!-- CSS Files -->
     <link href="{% static 'assets/css/black-dashboard.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/datatable/datatables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/jquery-ui-1.12.1.custom/jquery.css' %}" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="{% static 'assets/css/micss.css' %}" rel="stylesheet" />
 
     <style>
         html,
@@ -42,8 +48,9 @@
                 <h3 class="mt-2">Indicacion Clinica</h3>
             </div>
             <div class="col-sm text-center">
-                <a href="/"></a>
-                <img src="{% static 'assets/img/logo-his.png' %}" alt="logo" width="60px;" />
+                <a href="/indicacion/index/{{indicacion.id_evolucionFK_id}}">
+                    <img src="{% static 'assets/img/logo-his.png' %}" alt="logo" width="60px;" />
+                </a>
             </div>
         </div>
         <div class="card-body">
@@ -75,7 +82,7 @@
                         {{indicacion.id_evolucionFK.id_historiaclinicaFK.id_pacienteFK.fecha_nacimiento|date:"d-m-Y" }}</p>
                 </div>
                 <div class="col-sm text-center">
-                    <p><strong style="font-weight: bold;">FI:</strong> {{indicacion.id_evolucionFK.fecha_hora|date:"d-m-Y H-i"}}</p>
+                    <p><strong style="font-weight: bold;">FI:</strong> {{indicacion.id_evolucionFK.fecha_hora|date:"d-m-Y H:i a"}}</p>
                 </div>
             </div>
             <hr />
@@ -187,7 +194,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer justify-content-center">
+        <div class="row justify-content-center">
             <div class="stats">
                 {{direccion}} - {{ciudad}}
             </div>

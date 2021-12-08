@@ -4,7 +4,7 @@ from simple_history.models import HistoricalRecords
 class ExamenFisico(models.Model):
     id_examenfisicoPK = models.AutoField(primary_key=True)
     tension_arterial = models.CharField('TA',max_length=15,default="-",blank=True,null=True)
-    frecuencia_cardiaca = models.DecimalField('FC',max_digits=15,decimal_places=2,default=0.00,blank=True, null=True)
+    frecuencia_cardiaca = models.FloatField('FC',default=0.00,blank=True, null=True)
     frecuencia_respiratoria = models.DecimalField('FR',max_digits=15,decimal_places=2,default=0.00,blank=True, null=True)
     temp_ax = models.DecimalField('TEMP AX',max_digits=15,decimal_places=2,blank=True, null=True)
     sindrome_at = models.DecimalField('SAT',max_digits=15,decimal_places=2,default=0.00,blank=True, null=True)

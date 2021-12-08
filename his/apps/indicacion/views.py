@@ -19,6 +19,8 @@ import json
 from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 
+from django.contrib import messages
+
 
 class CreateIndicacion(LoginRequiredMixin,PermissionRequiredMixin,DetailView):
     permission_required = ("indicacion.add_indicacion")
@@ -41,7 +43,7 @@ class CreateIndicacion(LoginRequiredMixin,PermissionRequiredMixin,DetailView):
             action = request.POST['action']
             if action == "search_medicamentos":
                 data = []
-                for i in Medicamento.objects.filter(nombre__icontains=request.POST['term']):
+                for i in Medicamento.objects.filter(nombre__icontains=request.POST['term'],estado="Activo"):
                     item = i.toJSON()
                     item['value'] = i.nombre
                     data.append(item)
@@ -108,13 +110,14 @@ class CreateIndicacion(LoginRequiredMixin,PermissionRequiredMixin,DetailView):
                             det_solicitud.id_solicitud_laboratioFK_id = solicitud.id_solicitudlabPK
                             det_solicitud.fecha_solicitud = i['fecha_solicitud']
                             det_solicitud.save()
+                        messages.success(request,"La indicación se registró correctamente!")
                         data['id'] = indicacion.id_indicacionPK
                 except Exception as e:
                     data['error'] = str(e)
-                    print(str(e))
+                    messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         except Exception as e:
             data['error'] = str(e)
-            print(str(e))
+            messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         return JsonResponse(data,safe=False)
 
     def get_context_data(self, **kwargs):
@@ -138,13 +141,13 @@ class UpdateIndicacion(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
             action = request.POST['action']
             if action == "search_medicamentos":
                 data = []
-                for i in Medicamento.objects.filter(nombre__icontains=request.POST['term']):
+                for i in Medicamento.objects.filter(nombre__icontains=request.POST['term'], estado="Activo"):
                     item = i.toJSON()
                     item['value'] = i.nombre
                     data.append(item)
             if action == "search_solucion":
                data = []
-               for i in Medicamento.objects.filter(nombre__icontains=request.POST['term']):
+               for i in Medicamento.objects.filter(nombre__icontains=request.POST['term'], estado="Activo"):
                    item = i.toJSON()
                    item['value'] = i.nombre
                    data.append(item)
@@ -158,7 +161,7 @@ class UpdateIndicacion(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
 
                         indicacion = self.get_object()
                         indicacion.id_evolucionFK_id = request.POST['id_evolucionFK']
-                        indicacion.medico_update = request.POST['medico_update']
+                        indicacion.medico_updated = request.POST['medico_updated']
                         indicacion.dieta = request.POST['dieta']
                         indicacion.terapia_respiratoria = request.POST['terapia_respiratoria']
                         indicacion.save()
@@ -208,12 +211,13 @@ class UpdateIndicacion(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
                             det_solicitud.id_solicitud_laboratioFK_id = solicitud.id_solicitudlabPK
                             det_solicitud.fecha_solicitud = i['fecha_solicitud']
                             det_solicitud.save()
+                        messages.success(request,"La indicación se edito correctamente!")
                 except Exception as e:
                     data['error'] = str(e)
-                    print(str(e))
+                    messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         except Exception as e:
             data['error'] = str(e)
-            print(str(e))
+            messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         return JsonResponse(data,safe=False)
 
     def get_detail_medidag(self):
@@ -282,7 +286,7 @@ class IndicacionListFilterbyE(LoginRequiredMixin,PermissionRequiredMixin,ListVie
 
     def get_queryset(self):
         fk = self.kwargs['fk']
-        return self.model.objects.filter(id_evolucionFK = fk).order_by('-fecha_indicacion')
+        return self.model.objects.filter(id_evolucionFK = fk, estado="Activo").order_by('-fecha_indicacion')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -340,12 +344,12 @@ class DetalleIndicacion(LoginRequiredMixin,PermissionRequiredMixin,View):
                 'indicacion':Indicacion.objects.get(id_indicacionPK=self.kwargs['pk']),
                 'logohospital': '{}{}'.format(base.MEDIA_URL, 'logo-hospital.png'),
                 'logogobernacion': '{}{}'.format(base.MEDIA_URL, 'logo-gobernacion.png'),
-                'direccion': '3er. Anillo Externo, Av. Japón, entre Av. Canal Cotoca y Av. Paraguá – Telef. Piloto: 3-462037',
-                'ciudad': 'Santa Cruz de la Sierra - Bolivia',
+                'direccion': 'Av. San Martin de Porres',
+                'ciudad': 'Comarapa - Santa Cruz - Bolivia',
             }
             return render(request,'indicacionapp/detalle.html',context)
         except Exception as e:
-            print(str(e))
+            messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         return response.HttpResponseRedirect(reverse_lazy('indexHistoriaC'))
 
 @login_required
@@ -361,4 +365,5 @@ def change_status(request):
         indicacion.save()
     id = indicacion.id_evolucionFK_id
     data = id
+    messages.success(request,"Se cambio el estado.")
     return response.HttpResponse(data)

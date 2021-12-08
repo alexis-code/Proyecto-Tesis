@@ -1,4 +1,6 @@
 import json
+
+from django.contrib import messages
 from apps.historiaclinica.models import HistoriaClinica
 from django.http import response
 from django.urls.base import reverse_lazy
@@ -9,7 +11,6 @@ from django.views.generic import DetailView, View, ListView, UpdateView
 from django.db import transaction
 from django.http.response import JsonResponse
 from datetime import datetime,date
-from his.settings import base
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .models import Epicrisis, det_diagnosticodetalle
@@ -124,14 +125,14 @@ class CreateEpicrisis(LoginRequiredMixin,PermissionRequiredMixin,DetailView):
                         historia = HistoriaClinica.objects.get(id_historiaPK = evolucion.id_historiaclinicaFK_id)
                         historia.estado = "Inactivo"
                         historia.save()
-
+                        messages.success(request,"Epicrisis registrada correctamente!")
                         data['id'] = epicrisis.id_epicrisisPK
                 except Exception as e:
                     data['error'] = str(e)
-                    print(str(e))
+                    messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         except Exception as e:
             data['error'] = str(e)
-            print(str(e))
+            messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         return JsonResponse(data,safe=False)
 
 class UpdateEpicrisis(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
@@ -201,12 +202,13 @@ class UpdateEpicrisis(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
                         historia.save()
 
                         data['id'] = epicrisis.id_epicrisisPK
+                        messages.success(request,"Epicrisis editada correctamente!")
                 except Exception as e:
                     data['error'] = str(e)
-                    print(str(e))
+                    messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         except Exception as e:
             data['error'] = str(e)
-            print(str(e))
+            messages.error(request,"error: "+str(e)+", contacte con su administrador.")
         return JsonResponse(data,safe=False)
 
     def get_detail_diagnostico(self):
@@ -254,5 +256,6 @@ def change_status(request):
         epicrisis.save()
     response = JsonResponse({'mensaje': 'Exito!!'})
     response.status_code = 200
+    messages.success(request,"Se cambio el estado.")
     return response
     

@@ -3,15 +3,22 @@
 
 <head>
     {%load static%}
-    {% block tittle %}
-    <title>Epicrisis - Hospital Japonés</title>
-    {% endblock %}
-    <link rel="shortcut icon" href="{% static 'baseapp/assets/img/hj.ico' %}" />
+    <title>Epicrisis|Detalle</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="{% static 'baseapp/assets/css/material-dashboard.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'assets/img/hj.ico' %}" />
+    <!-- Material Kit CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="{% static 'assets/css/black-dashboard.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/datatable/datatables.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/jquery-ui-1.12.1.custom/jquery.css' %}" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="{% static 'assets/css/micss.css' %}" rel="stylesheet" />
 
     <style>
         html,
@@ -56,12 +63,12 @@
 
 </head>
 
-<body>
+<body class="white-content">
     <div class="card">
         <dvi class="card-header">
             <div class="row justify-content-center">
                 <div class="col-sm text-center">
-                    <img src="{% static 'baseapp/assets/img/logo-gobernacion.png' %}" alt="logo" width="140px;" />
+                    <img src="{% static 'assets/img/logo-gobernacion.png' %}" alt="logo" width="140px;" />
                 </div>
                 <div class="col-sm-5 text-center">
                     <h3 class="mt-2">RESUMEN DE ALTA (EPICRISIS)</h3>
@@ -78,7 +85,7 @@
                 </div>
                 <div class="col-sm text-center">
                     <a href="/epicrisis/index/{{epicrisis.id_evolucionFK.id_historiaclinicaFK_id}}">
-                        <img src="{% static 'baseapp/assets/img/logo_hospital.png' %}" alt="logo" width="60px;" />
+                        <img src="{% static 'assets/img/logo-his.png' %}" alt="logo" width="60px;" />
                     </a>
                 </div>
             </div>
@@ -196,7 +203,7 @@
                         {{epicrisis.estudio_imagenes}}</p>
                 </div>
                 <div class="col-sm">
-                    <div class="table-responsive">
+                    <div class="table">
                         <table id="customers2" class="text-center">
                             <tr>
                                 <td><strong style="font-weight: bold;">GB:</strong>
@@ -284,7 +291,7 @@
             </div>
         </div>
         <hr>
-        <div class="card-footer text-center">
+        <div class="row text-center">
             <div class="col-sm">
                 <p><strong style="font-weight: bold;">Médico:</strong> {{user.first_name}} {{user.last_name}}</p>
             </div>

@@ -2636,8 +2636,8 @@ input[type="button"].btn-block {
   border-bottom-left-radius: 0; }
 
 .dropdown-toggle-split {
-  padding-right: 30px;
-  padding-left: 30px; }
+  padding-right: 20px;
+  padding-left: 20px; }
   .dropdown-toggle-split::after,
   .dropup .dropdown-toggle-split::after,
   .dropright .dropdown-toggle-split::after {
@@ -4879,7 +4879,7 @@ a.close.disabled {
   .carousel-indicators li {
     box-sizing: content-box;
     flex: 0 1 auto;
-    width: 30px;
+    width: 20px;
     height: 3px;
     margin-right: 3px;
     margin-left: 3px;
@@ -8647,7 +8647,7 @@ a.text-darker:hover, a.text-darker:focus {
     color: #9A9A9A; }
   .btn.dropdown-toggle:after,
   .navbar .navbar-nav > a.btn.dropdown-toggle:after {
-    margin-left: 30px !important; }
+    margin-left: 20px !important; }
 
 .btn-primary {
   background: #e14eca;
@@ -9166,7 +9166,7 @@ fieldset[disabled]
 
 .btn-round {
   border-width: 1px;
-  border-radius: 30px; }
+  border-radius: 20px; }
   .btn-round.btn-simple {
     padding: 10px 22px; }
 
@@ -9479,7 +9479,7 @@ fieldset[disabled]
     display: inline-block;
     float: left;
     margin-bottom: 0;
-    padding-left: 30px;
+    padding-left: 20px;
     list-style: none; }
   .footer .nav-item {
     display: inline-block; }
@@ -9512,7 +9512,7 @@ fieldset[disabled]
 @media screen and (min-width: 992px) {
   .footer .copyright {
     float: right;
-    padding-right: 30px; } }
+    padding-right: 20px; } }
 
 @media screen and (max-width: 768px) {
   .footer nav {
@@ -10380,21 +10380,21 @@ img {
 
 .modal-search .modal-header .close {
   color: #555555;
-  top: 30px !important; }
+  top: 20px !important; }
 
 .modal-search .modal-footer {
   border-top: 2px solid #f9f9f9;
   margin: 0px 25px 20px; }
 
 .navbar {
-  padding: 10px 30px 10px 15px;
+  padding: 10px 20px 10px 15px;
   width: 100%;
   z-index: 1050;
   background: #1a1e34; }
   .navbar .photo {
     display: inline-block;
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     vertical-align: middle;
     overflow: hidden; }
@@ -10706,18 +10706,18 @@ a {
 
 h1, .h1 {
   line-height: 1.05;
-  margin-bottom: 30px; }
+  margin-bottom: 20px; }
   h1 small, .h1 small {
     font-weight: 600;
     text-transform: uppercase;
     opacity: .8; }
 
 h2, .h2 {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   line-height: 1.2; }
 
 h3, .h3 {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   line-height: 1.4em; }
 
 h4, .h4 {
@@ -10809,8 +10809,8 @@ hr {
 .table > tbody > tr > td {
   color: rgba(255, 255, 255, 0.7) !important; }
   .table > tbody > tr > td .photo {
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     overflow: hidden;
     margin: 0 auto; }
@@ -10936,7 +10936,7 @@ hr {
   padding-bottom: 10px; }
 
 #tables .table-responsive {
-  margin-bottom: 30px; }
+  margin-bottom: 20px; }
 
 table.tablesorter thead tr .header {
   background-image: url("../img/bg.gif");
@@ -11088,7 +11088,7 @@ table.tablesorter thead tr .headerSortDown {
   z-index: 1031;
   border-radius: 8px 0 0 8px;
   text-align: center;
-  top: 130px; }
+  top: 120px; }
   .fixed-plugin li > a,
   .fixed-plugin .badge {
     transition: all .34s;
@@ -11179,7 +11179,7 @@ table.tablesorter thead tr .headerSortDown {
     height: 50px; }
   .fixed-plugin li.header-title {
     color: #ffffff;
-    height: 30px;
+    height: 20px;
     line-height: 25px;
     font-size: 12px;
     font-weight: 600;
@@ -11300,7 +11300,7 @@ table.tablesorter thead tr .headerSortDown {
   background: #ba54f5;
   background: linear-gradient(0deg, #ba54f5 0%, #e14eca 100%);
   height: calc(100vh - 90px);
-  width: 230px;
+  width: 220px;
   position: fixed;
   top: 0;
   left: 0;
@@ -11414,7 +11414,7 @@ table.tablesorter thead tr .headerSortDown {
     .sidebar .nav li > a,
     .off-canvas-sidebar .nav li > a {
       margin: 10px 15px 0;
-      border-radius: 30px;
+      border-radius: 20px;
       color: #ffffff;
       display: block;
       text-decoration: none;
@@ -11496,7 +11496,7 @@ table.tablesorter thead tr .headerSortDown {
     .sidebar .nav p,
     .off-canvas-sidebar .nav p {
       margin: 0;
-      line-height: 30px;
+      line-height: 20px;
       position: relative;
       display: block;
       height: auto;
@@ -11506,7 +11506,7 @@ table.tablesorter thead tr .headerSortDown {
       font-size: 20px;
       float: left;
       margin-right: 12px;
-      line-height: 30px;
+      line-height: 20px;
       width: 34px;
       text-align: center;
       color: rgba(255, 255, 255, 0.8);
@@ -11536,7 +11536,7 @@ table.tablesorter thead tr .headerSortDown {
       bottom: 0;
       right: 15px;
       height: 1px;
-      width: calc(100% - 30px);
+      width: calc(100% - 20px);
       background: rgba(255, 255, 255, 0.5); }
     .sidebar .logo p,
     .off-canvas-sidebar .logo p {
@@ -11555,7 +11555,7 @@ table.tablesorter thead tr .headerSortDown {
       color: #ffffff;
       text-decoration: none;
       font-weight: 400;
-      line-height: 30px;
+      line-height: 20px;
       overflow: hidden; }
   .sidebar .logo-tim,
   .off-canvas-sidebar .logo-tim {
@@ -11590,7 +11590,7 @@ table.tablesorter thead tr .headerSortDown {
       bottom: 0;
       right: 15px;
       height: 1px;
-      width: calc(100% - 30px);
+      width: calc(100% - 20px);
       background: rgba(255, 255, 255, 0.5); }
     .sidebar .user .photo,
     .off-canvas-sidebar .user .photo {
@@ -11655,8 +11655,21 @@ table.tablesorter thead tr .headerSortDown {
   .main-panel[data="primary"] {
     border-top: 2px solid #e14eca; }
   .main-panel > .content {
-    padding: 78px 30px 30px 280px;
-    min-height: calc(100vh - 70px); }
+    padding: 78px 20px 20px 280px;
+    min-height: calc(100vh - 70px); 
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;}
+    .content:before{
+      content:'';
+	position: absolute;
+        top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(255,255,255,0.7);
+    }
   .main-panel > .navbar {
     margin-bottom: 0; }
   .main-panel .header {
@@ -11686,7 +11699,7 @@ table.tablesorter thead tr .headerSortDown {
   .sidebar-mini .sidebar {
     display: block;
     z-index: 1030;
-    box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 30px 0 rgba(0, 0, 0, 0.35); }
+    box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 20px 0 rgba(0, 0, 0, 0.35); }
     .sidebar-mini .sidebar .logo a.logo-normal {
       opacity: 0;
       transform: translate3d(-25px, 0, 0); }
@@ -11716,9 +11729,9 @@ table.tablesorter thead tr .headerSortDown {
     .sidebar-mini .sidebar:hover .nav [data-toggle="collapse"] ~ div > ul > li > a .sidebar-mini-icon {
       opacity: 0; }
   .sidebar-mini .main-panel > .content {
-    padding-left: 130px; }
+    padding-left: 120px; }
   .sidebar-mini footer {
-    padding-left: 130px; }
+    padding-left: 120px; }
   .navbar-minimize button {
     margin-left: 10px; }
     .navbar-minimize button i {
@@ -11782,7 +11795,7 @@ table.tablesorter thead tr .headerSortDown {
   .main-panel {
     width: 100%; }
     .main-panel .content {
-      padding-left: 30px; }
+      padding-left: 20px; }
   .nav-open .main-panel {
     right: 0;
     transform: translate3d(260px, 0, 0); }
@@ -12016,7 +12029,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
   border-left: 4px solid transparent;
   margin-top: -5px;
   position: absolute;
-  top: 30px;
+  top: 20px;
   margin-left: 5px; }
 
 .pull-left {
@@ -12133,7 +12146,7 @@ code {
 @media screen and (max-width: 768px) {
   .landing-page .section-story-overview .image-container:nth-child(2) {
     margin-left: 0;
-    margin-bottom: 30px; } }
+    margin-bottom: 20px; } }
 
 @media screen and (max-width: 576px) {
   .page-header .container h6.category-absolute {
@@ -12185,11 +12198,11 @@ code {
     text-align: right; }
   .rtl .sidebar:before,
   .rtl .bootstrap-navbar:before {
-    right: 30px;
+    right: 20px;
     left: auto; }
 
 .rtl .main-panel .content {
-  padding: 80px 280px 30px 30px; }
+  padding: 80px 280px 20px 20px; }
 
 .rtl .footer {
   padding: 24px 300px 24px 0; }
@@ -12242,10 +12255,10 @@ code {
 
 @media (min-width: 991px) {
   .rtl.sidebar-mini .main-panel .content {
-    padding-right: 130px;
+    padding-right: 120px;
     padding-left: 50px; }
   .rtl.sidebar-mini footer {
-    padding-right: 130px;
+    padding-right: 120px;
     padding-left: 50px; }
   .rtl .navbar-minimize button {
     margin-right: -5px; } }
@@ -12591,7 +12604,7 @@ textarea.form-control {
     margin-right: 1.5rem; }
 
 .search-bar {
-  margin-left: 30px; }
+  margin-left: 20px; }
   .search-bar .btn {
     margin: 0; }
   .search-bar.input-group {
@@ -13053,7 +13066,7 @@ Copyright (c) 2015 Daniel Eden
   border: 0;
   position: relative;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   box-shadow: 0 1px 20px 0px rgba(0, 0, 0, 0.1); }
   .card label {
     color: rgba(255, 255, 255, 0.6); }
@@ -13197,8 +13210,8 @@ Copyright (c) 2015 Daniel Eden
     height: 200px;
     position: relative; }
   .card .avatar {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     overflow: hidden;
     border-radius: 50%;
     margin-bottom: 15px; }
@@ -13243,7 +13256,7 @@ Copyright (c) 2015 Daniel Eden
       border-top: none;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
   .card-chart .card-progress {
-    margin-top: 30px;
+    margin-top: 20px;
     padding: 0 10px; }
   .card-chart .chart-area {
     height: 220px;
@@ -13326,7 +13339,7 @@ Copyright (c) 2015 Daniel Eden
     margin-bottom: 6px;
     text-align: center; }
   .card-user .card-description {
-    margin-top: 30px; }
+    margin-top: 20px; }
 
 .card-tasks {
   height: 473px; }

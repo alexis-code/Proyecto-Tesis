@@ -11,38 +11,38 @@
       <li class="{% if 'historia' in request.path %} active {% endif %}">
         <a href="{% url 'indexHistoriaC' %}">
           <i class="material-icons">fact_check</i>
-          <p>Historias Clinicas</p>
+          <p style="font-weight: bold; font-size: small;">Historias Clinicas</p>
         </a>
       </li>
       <li class="{% if 'paciente' in request.path %} active {% endif %}">
         <a href="{% url 'ListaPaciente' %}">
           <i class="material-icons">people</i>
-          <p>Pacientes</p>
+          <p style="font-weight: bold; font-size: small;">Pacientes</p>
         </a>
       </li>
       <li class="{% if 'medicamento' in request.path %} active {% endif %}">
         <a href="{% url 'ListaMedicamento' %}">
           <i class="material-icons">medical_services</i>
-          <p>Medicamentos</p>
+          <p style="font-weight: bold; font-size: small;">Medicamentos</p>
         </a>
       </li>
       <li class="{% if 'codigo' in request.path %} active {% endif %}">
         <a href="{% url 'indexCodigoCie' %}">
           <i class="material-icons">post_add</i>
-          <p>Códigos Cie-10</p>
+          <p style="font-weight: bold; font-size: small;">Códigos Cie-10</p>
         </a>
       </li>
       <li class="{% if 'reporte' in request.path %} active {% endif %}">
         <a href="{% url 'dashboard' %}">
           <i class="material-icons">assignment</i>
-          <p>Reportes</p>
+          <p style="font-weight: bold; font-size: small;">Reportes</p>
         </a>
       </li>
       {% if user.is_staff %}
       <li>
         <a href="/admin/">
           <i class="material-icons">admin_panel_settings</i>
-          <p>Administración</p>
+          <p style="font-weight: bold; font-size: small;">Administración</p>
         </a>
       </li>
       {% endif %}

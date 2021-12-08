@@ -5,482 +5,177 @@
 {% endblock stylesheets %}
 {% block content %}
 <div class="content">
-    <div class="row">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <h4>Control de Estadistica de Laboratorio</h4>
-                </div>
+  <div class="row">
+    <div class="card">
+      {% if messages %}
+      <div class="row">
+        <div class="col">
+          {% for message in messages %}
+          {% if message.tags == "error" %}
+          <div class="alert alert-danger fade show" role="alert">
+            {% else %}
+            <div class="alert alert-success fade show" role="alert">
+              {% endif %}
+              <strong>{{message}}</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <h6>Seleccione el rango de fecha:</h6>
-                </div>
-                <form action="/evolucion/estadistica/generar/" method="POST">
-                    <div class="row justify-content-center">
-                        <input type="hidden" name="pk" value="{{id_historia}}"/>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control datetimepicker" name="fecha_desde" id="fecha_inicio" value="{{fechadesde}}" required>
-                        </div>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control datetimepicker" name="fecha_hasta" id="fecha_fin" value="{{fechahasta}}" required>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <input type="submit" class="btn btn-success btn-sm" value="Generar">
-                    </div>
-                </form>
-            </div>
+            {% endfor %}
+          </div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="card card-chart">
+        {% endif %}
         <div class="card-header">
-            <div class="card-category">
-                <h5 class="card-title"><i class="tim-icons icon-chart-bar-32 text-primary"></i>Estadística de Laboratio</h5>
-            </div>
+          <div class="row">
+            <h4>Control de Estadistica de Laboratorio</h4>
+          </div>
         </div>
         <div class="card-body">
-            <div class="chart-area">
-                <canvas id="lineChartLab"></canvas>
+          <div class="row">
+            <h6>Seleccione el rango de fecha:</h6>
+          </div>
+          <form action="/evolucion/estadistica/generar/" method="POST">
+            <div class="row justify-content-center">
+              <input type="hidden" name="pk" value="{{id_historia}}" />
+              <div class="col-sm-4">
+                <input type="date" class="form-control datetimepicker" name="fecha_desde" id="fecha_inicio"
+                  value="{{fechadesde}}" required>
+              </div>
+              <div class="col-sm-4">
+                <input type="date" class="form-control datetimepicker" name="fecha_hasta" id="fecha_fin"
+                  value="{{fechahasta}}" required>
+              </div>
             </div>
+            <div class="row justify-content-center">
+              <input type="submit" class="btn btn-success btn-sm" value="Generar">
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>
-{% endblock %}
+  </div>
+  <div class="row">
+    <div class="card card-chart">
+      <div class="card-body">
+        <figure class="highcharts-figure">
+          <div id="container"></div>
 
-{% block javascripts %}
-<script>
-// General configuration for the charts with Line gradientStroke
-gradientChartOptionsConfiguration =  {
-  maintainAspectRatio: false,
-  legend: {
-        display: false
-   },
+        </figure>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
 
-   tooltips: {
-     backgroundColor: '#fff',
-     titleFontColor: '#333',
-     bodyFontColor: '#666',
-     bodySpacing: 4,
-     xPadding: 12,
-     mode: "nearest",
-     intersect: 0,
-     position: "nearest"
-   },
-   responsive: true,
-   scales:{
-     yAxes: [{
-       barPercentage: 1.6,
-           ticks: {
-              suggestedMin:50,
-              suggestedMax: 110,
-              padding: 20,
-              fontColor: "#9a9a9a"
-           }
-         }],
+  {% block javascripts %}
 
-     xAxes: [{
-       barPercentage: 1.6,
-           gridLines: {
-             drawBorder: false,
-              color: 'rgba(220,53,69,0.1)',
-              zeroLineColor: "transparent",
-           },
-           ticks: {
-              padding: 20,
-              fontColor: "#9a9a9a"
-           }
-         }]
-     }
-};
+  <script>
+    let arreglo = {{ fecha| safe}}
+    console.log(arreglo)
+    Highcharts.chart('container', {
 
-var ctx = document.getElementById("lineChartLab").getContext("2d");
+      title: {
+        text: 'Estadística de laboratorio'
+      },
 
-var gradientStroke = ctx.createLinearGradient(0,230,0,50);
+      subtitle: {
+        text: 'Hospital San Martín de Porres'
+      },
+      xAxis: {
+        categories: arreglo
+      },
 
-gradientStroke.addColorStop(1, 'rgba(72,72,176,0.2)');
-gradientStroke.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
-let arreglo = {{fecha|safe}}
-var data = {
-  labels: arreglo,
-  datasets: [{
-    label: "GB",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#44B1EB',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#44B1EB',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{datos_gb|safe}},
-  },{
-    label: "HB",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#DB9D32',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#DB9D32',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_hb|safe}},
-  },{
-    label: "PH",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#d048b6',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#d048b6',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_ph|safe}},
-  },{
-    label: "GOT",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#893CDB',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#893CDB',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_got|safe}},
-  },{
-    label: "NEU",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#87DBA6',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#87DBA6',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_neu| safe}},
-  },{
-    label: "HTCO",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#8AF2EF',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#8AF2EF',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_htco| safe}},
-  },{
-    label: "PCO",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#E8616D',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#E8616D',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_pco| safe}},
-  },{
-    label: "GPT",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#F5F456',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#F5F456',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_gpt| safe}},
-  },{
-    label: "LIN",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#EB7565',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#EB7565',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_lin| safe}},
-  },{
-    label: "CR",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#F2A057',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#F2A057',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_cr| safe}},
-  },{
-    label: "HCO",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#D4AEE8',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#D4AEE8',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_hco| safe}},
-  },{
-    label: "PT",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#C0EBC2',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#C0EBC2',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_pt| safe}},
-  },{
-    label: "CAY",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#E88B5A',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#E88B5A',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_cay| safe}},
-  },{
-    label: "UREA",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#3ADB27',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#3ADB27',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_urea| safe}},
-  },{
-    label: "ALB",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#EBDA96',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#EBDA96',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_alb| safe}},
-  },{
-    label: "PO",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#DFA799',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#DFA799',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_po| safe}},
-  },{
-    label: "PLQ",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#CADF97',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#CADF97',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_plq| safe}},
-  },{
-    label: "NA",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#99F7A4',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#99F7A4',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_na| safe}},
-  },{
-    label: "EB",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#EDD1A6',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#EDD1A6',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_eb| safe}},
-  },{
-    label: "CL",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#ED0274',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#ED0274',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_cl| safe}},
-  },{
-    label: "K",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#9E05FA',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#9E05FA',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_k| safe}},
-  },{
-    label: "LACT",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#ED9A0C',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#ED9A0C',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_lact| safe}},
-  },{
-    label: "DD",
-    fill: false,
-    backgroundColor: gradientStroke,
-    borderColor: '#81ED09',
-    borderWidth: 2,
-    borderDash: [],
-    borderDashOffset: 0.0,
-    pointBackgroundColor: '#81ED09',
-    pointBorderColor:'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: '#d048b6',
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 4,
-    data: {{ datos_dd| safe}},
-  }]
-};
+      yAxis: {
+        title: {
+          text: 'Laboratorios en %'
+        }
+      },
 
-var myChart = new Chart(ctx, {
-  type: 'line',
-  data: data,
-  options: gradientChartOptionsConfiguration
-});
-</script>
-{% endblock javascripts %}
+      series: [{
+        name: 'GB',
+        data: {{ datos_gb| safe}}
+      }, {
+        name: 'HB',
+        data: {{ datos_hb| safe}}
+      }, {
+        name: 'PH',
+        data: {{ datos_ph| safe}}
+      }, {
+        name: 'GOT',
+        data: {{ datos_got| safe}}
+      }, {
+        name: 'NEU',
+        data: {{ datos_neu| safe}}
+      }, {
+        name: 'HTCO',
+        data: {{ datos_htco| safe}}
+      }, {
+        name: 'PCO',
+        data: {{ datos_pco| safe}}
+      }, {
+        name: 'GPT',
+        data: {{ datos_gpt| safe}}
+      }, {
+        name: 'LIN',
+        data: {{ datos_lin| safe}}
+      }, {
+        name: 'CR',
+        data: {{ datos_cr| safe}}
+      }, {
+        name: 'HCO',
+        data: {{ datos_hco| safe}}
+      }, {
+        name: 'PT',
+        data: {{ datos_pt| safe}}
+      }, {
+        name: 'CAY',
+        data: {{ datos_cay| safe}}
+      }, {
+        name: 'UREA',
+        data: {{ datos_urea| safe}}
+
+      }, {
+        name: 'ALB',
+        data: {{ datos_alb| safe}}
+      }, {
+        name: 'PO',
+        data: {{ datos_po| safe}}
+      }, {
+        name: 'PLQ',
+        data: {{ datos_plq| safe}}
+      }, {
+        name: 'NA',
+        data: {{ datos_na| safe}}
+      }, {
+        name: 'EB',
+        data: {{ datos_eb| safe}}
+      }, {
+        name: 'CL',
+        data: {{ datos_cl| safe}}
+      }, {
+        name: 'K',
+        data: {{ datos_k| safe}}
+      }, {
+        name: 'LACT',
+        data: {{ datos_lact| safe}}
+      }, {
+        name: 'DD',
+        data: {{ datos_dd| safe}}
+      }],
+
+      responsive: {
+      rules: [{
+        condition: {
+          maxWidth: 500
+        },
+        chartOptions: {
+          legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom'
+          }
+        }
+      }]
+    }
+  });
+  </script>
+  {% endblock javascripts %}

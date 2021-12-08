@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required,permission_required
 from django.http.response import JsonResponse
 from django.shortcuts import render
@@ -111,4 +112,5 @@ def change_status(request):
         codigo_cie.save()
     response = JsonResponse({"mensaje": "Exito!!"})
     response.status_code = 200
+    messages.success(request,"Se cambió el estado del codigo CIE - 10: "+codigo_cie.codigo_cie)
     return response

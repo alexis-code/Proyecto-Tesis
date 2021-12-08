@@ -6,12 +6,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block tittle %}
-    <title>Resultado de Cultivo</title>
-    {% endblock %}
-    <link rel="shortcut icon" href="{% static 'baseapp/assets/img/hj.ico' %}" />
-    <!-- Material Kit CSS -->
-    <link href="{% static 'baseapp/assets/css/material-dashboard.css' %}" rel="stylesheet" />
+    <title>Resultado de Cultivo|Detalle</title>
+    <link rel="icon" type="image/png" href="{% static 'assets/img/logo-his.png' %}">
+   <!-- Material Kit CSS -->
+   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+   <!-- Nucleo Icons -->
+   <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
+   <!-- CSS Files -->
+   <link href="{% static 'assets/css/black-dashboard.css' %}" rel="stylesheet" />
+   <link href="{% static 'assets/datatable/datatables.min.css' %}" rel="stylesheet" />
+   <link href="{% static 'assets/jquery-ui-1.12.1.custom/jquery.css' %}" rel="stylesheet" />
+   <!-- CSS Just for demo purpose, don't include it in your project -->
+   <link href="{% static 'assets/css/micss.css' %}" rel="stylesheet" />
 
     <style>
         html,
@@ -36,25 +43,25 @@
             padding-bottom: 2px;
             padding: 4px;
             text-align: center;
-            background-color: #04AA6D;
-            color: white;
+            background-color: #009197;
+            color: black;
         }
     </style>
 </head>
 
-<body>
+<body class="white-content">
     <div class="card">
         <dvi class="card-header">
             <div class="row justify-content-center">
                 <div class="col-sm text-center">
-                    <img src="{% static 'baseapp/assets/img/logo-gobernacion.png' %}" alt="logo" width="150px;" />
+                    <img src="{% static 'assets/img/logo-gobernacion.png' %}" alt="logo" width="150px;" />
                 </div>
                 <div class="col-sm text-center">
                     <h2 class="mt-2">Resultado de Cultivo</h2>
                 </div>
                 <div class="col-sm text-center">
                     <a href="/evolucion/result_cultivo/{{object.id_evolucionFK_id}}">
-                    <img src="{% static 'baseapp/assets/img/logo_hospital.png' %}" alt="logo" width="80px;" />
+                    <img src="{% static 'assets/img/logo-his.png' %}" alt="logo" width="80px;" />
                 </a>
                 </div>
             </div>
@@ -90,7 +97,7 @@
             <hr />
             <div class="row">
                 <div class="col-sm text-center">
-                    <div class="table-responsive">
+                    <div class="table">
                         <table id="customers">
                             <thead>
                                 <tr>

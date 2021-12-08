@@ -13,7 +13,11 @@ urlpatterns = [
     path('detalle/<int:pk>', DetalleEvolucion.as_view(),name='EvolucionDetail'),
     path('index/evoluciones/<int:fk>',EvolucionListFilterbyHCAll.as_view(),name='EvolucionIndexAll'),
     
-    #Urls para las acciones con los resultados de cultivos 
+    #url para cultivos
+    path('cultivo/pendientes/<int:fk>',CultivoSolicitadoListEnCurso.as_view(),name='ListaCultivosSolicitados'),
+    path('cultivo/resultados/<int:fk>',ResultadoCultivoList.as_view(),name='CultivosRegistrados'),
+    #Urls para las acciones con los resultados de cultivos
+    path('registrar_resultado',registrar_result_cultivo,name="RegistroResultCultivo"), 
     path('result_cultivo/<int:fk>', ResultadoCultivoList.as_view(),name='ResultadoCultivo'),
     path('update/resultado_cultivo/<int:pk>', UpdateResultCultivo.as_view(),name='ResultCultivoUpdate'),
     path('detalle_cultivo/<int:pk>', DetalleResultCultivo.as_view(),name='DetalleCultivo'),

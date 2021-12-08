@@ -3,15 +3,6 @@
 {% block tittle %}
 <title>Evolución - Hospital Japonés</title>
 {% endblock %}
-{% block stylesheets %}
-
-<style>
-    .unshow {
-        display: none;
-    }
-</style>
-
-{% endblock stylesheets %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-sm-8 col-sm-offset-2">
@@ -20,6 +11,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
+                    <a href="/evolucion/index/{{object.id_historiaclinicaFK_id}}">Volver</a>
                     <div class="card-header card-header-success">
                         <h4 class="card-title"><strong>Cod. HC:</strong>
                             {{object.id_historiaclinicaFK.cod_historiaclinica}}</h4>
@@ -400,7 +392,7 @@
                                             placeholder="Ingrese el cultivo a solicitar" />
                                     </div>
                                 </div>
-                                <thead class="text-info text-center">
+                                <thead class="text-info">
                                     <tr style="max-width: 100%;">
                                         <th class="th-sm" scope="col" style="visibility: hidden;">id</th>
                                         <th class="th-sm" scope="col" style="visibility: hidden;">id</th>
@@ -453,136 +445,12 @@
     </div>
 </div>
 
-<!--Seccion para el registro de resultado de cultivos -->
-<div class="modal fade" id="resultadoCultivo" tabindex="-1" role="">
-    <div class="modal-dialog modal-login" role="document">
-        <div class="modal-content">
-            <div class="card card-signup card-plain">
-                <div class="modal-header">
-                    <h5 class="modal-title card-title">Registrar Resultado</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i class="material-icons">clear</i>
-                    </button>
-                </div>
-                <div class="form-group bmd-form-group text-center">
-                    <h3 class="modal-title card-title" id="nombrecultivo"></h3>
-                </div>
-                <div class="modal-body">
-                    <form class="form" method="POST">
-                        <input type="hidden" name="action2" value="add_resultcultivo">
-                        <input type="hidden" name="id_cultivoFK" id="idcultivo">
-                        <input type="hidden" name="id_evolucionFK" id="idevolucion">
-                        <input type="hidden" name="medico" value="{{user.first_name}} {{user.last_name}}">
-                        <div class="card-content">
-                            <div class="row">
-                                <select class="form-control" name="resultado_probable" id="patogeno">
-                                    <option value="1">No se aislo ningun patogeno</option>
-                                    <option value="2">Se asilo patogeno</option>
-                                </select>
-                            </div>
-                            <br>
-                            <div class="row unshow" id="nombrepatogeno">
-                                <input type="text" class="form-control" name="patogeno" id="idpatogeno"
-                                    placeholder="Nombre del patógeno">
-                            </div>
-                            <br>
-                            <div class="row unshow" id="sensible">
-                                <input type="text" class="form-control" name="sensible" id="idsensible"
-                                    placeholder="Sensible" />
-                            </div>
-                            <br>
-                            <div class="row unshow" id="resistente">
-                                <input type="text" class="form-control" name="resistente" id="idresistente"
-                                    placeholder="Resistente" />
-                            </div>
-                            <br>
-                            <div class="row unshow" id="parcial_sensible">
-                                <input type="text" class="form-control" id="idparcial" name="parcial_sensible"
-                                    placeholder="Parcialmente Sensible" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <textarea name="comentario" class="form-control" rows="4"
-                                placeholder="Ingrese su comentario"></textarea>
-                        </div>
-                </div>
-                </form>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button onclick="submit()" id="cultivo_resultado" class="btn btn-success" data-dismiss="modal">Confirmar
-                    Registro</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    function submit() {
-        var parameters = new FormData();
-        parameters.append('action', $('input[name="action2"]').val());
-        parameters.append('id_cultivoFK', $('input[name="id_cultivoFK"]').val());
-        parameters.append('id_evolucionFK', $('input[name="id_evolucionFK"]').val());
-        parameters.append('medico', $('input[name="medico"]').val());
-        parameters.append('resultado_probable', $('select[name="resultado_probable"]').val());
-        parameters.append('patogeno', $('input[name="patogeno"]').val());
-        parameters.append('sensible', $('input[name="sensible"]').val());
-        parameters.append('resistente', $('input[name="resistente"]').val());
-        parameters.append('parcial_sensible', $('input[name="parcial_sensible"]').val());
-        parameters.append('comentario', $('textarea[name="comentario"]').val());
-        $.ajax({
-            url: window.location.pathname,
-            type: 'POST',
-            data: parameters,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-        }).done(function (data) {
-            //actualiza la tabla de cultivos
-            var estado = document.getElementById('cultivo_id_' + data.id_cultivo)
-            var add = document.getElementById('add_result_' + data.id_cultivo)
-            var remove = document.getElementById('remove_result_' + data.id_cultivo)
-            var label = document.getElementById('resultado_cultivo_' + data.id_cultivo)
-            var fecha_cultivo = document.getElementById('fecha_cultivo_' + data.id_cultivo)
-            estado.value = data.estado
-            if (estado.value == "Registrado") {
-                estado.setAttribute("disabled", "");
-            }
-            if (data.id_cultivo > 0) {
-                add.setAttribute("hidden", "")
-                remove.setAttribute("hidden", "")
-                label.textContent = "Registrado";
-                fecha_cultivo.disabled = true;
-            }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("No puede registrar resultados de un cultivo que no ah sido creado")
-        })
-    }
-</script>
 <script src="{% static 'assets/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
-<script>
-    $('#patogeno').change(function () {
-        var patogeno = $(this).val()
-        document.getElementById('idpatogeno').value = "";
-        document.getElementById('idsensible').value = "";
-        document.getElementById('idresistente').value = "";
-        document.getElementById('idparcial').value = "";
-        if (patogeno == '2') {
-            $('#nombrepatogeno').removeClass('unshow');
-            $('#sensible').removeClass('unshow');
-            $('#resistente').removeClass('unshow');
-            $('#parcial_sensible').removeClass('unshow');
-        }
-        if (patogeno == '1') {
-            $('#nombrepatogeno').addClass('unshow');
-            $('#sensible').addClass('unshow');
-            $('#resistente').addClass('unshow');
-            $('#parcial_sensible').addClass('unshow');
-        }
-    })
-</script>
+
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', () => {
@@ -665,17 +533,7 @@
                         targets: [5],
                         orderable: false,
                         render: function (data, type, row) {
-                            if (row.id_cultivoPK > 0) {
-                                if (row.estado != "Registrado") {
-                                    return '<a rel="add" tittle="Registrar resultados" class="btn btn-success btn-link btn-sm" id="add_result_' + row.id_cultivoPK + '" data-toggle="modal" data-target="#resultadoCultivo"><i class="material-icons">done</i></a>|<a rel="remove" tittle="Eliminar de la lista"  class="btn btn-danger btn-link btn-sm" id="remove_result_' + row.id_cultivoPK + '"><i class="material-icons">clear</i></a>';
-                                }
-                                else {
-                                    return '<h4 style="color: green;" id="resultado_cultivo_' + row.id_cultivoPK + '">Registrado</h4>';
-                                }
-                            }
-                            else {
-                                return '<a rel="remove" tittle="Eliminar de la lista"  class="btn btn-danger btn-link btn-sm"><i class="material-icons">clear</i></a>'
-                            }
+                            return '<a rel="remove" tittle="Eliminar de la lista"  class="btn btn-danger btn-link btn-sm"><i class="material-icons">clear</i></a>'
                         }
                     },
                 ]
@@ -787,21 +645,37 @@
             medicamento_list.items.tratamiento[tr.row].indicacion = indicacion;
         })
 
-    function enviardatos() {
-        var cultivo = document.getElementById('cultivo');
-        var item = {
-            "id_cultivoPK": "",
-            "nombre": "",
-            "fecha": "",
-            "estado": "",
-        };
-        item.id_cultivoPK = "";
-        item.nombre = cultivo.value;
-        item.fecha = "";
-        item.estado = "En Curso";
-        cultivos_list.add(item);
-        cultivo.value = "";
-    };
+    var cultivo = document.getElementById('cultivo');
+    cultivo.addEventListener("keydown", function (e) {
+        let date = new Date();
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        var fulldate = "";
+        if (day < 10) {
+            day = '0' + day;
+        }
+        if (month < 10) {
+            month = '0' + month;
+        }
+        fulldate = year + '-' + month + '-' + day;
+        if (cultivo.value != "") {
+            if (e.keyCode === 13) {
+                var item = {
+                    "id_cultivoPK":"",
+                    "nombre": "",
+                    "fecha": "",
+                    "estado": "",
+                };
+                item.id_cultivoPK = "";
+                item.nombre = cultivo.value;
+                item.fecha = fulldate;
+                item.estado = "En Curso";
+                cultivos_list.add(item);
+                cultivo.value = "";
+            }
+        }
+    });
 
     $(function () {
         $('input[name="buscador"]').autocomplete({
@@ -916,4 +790,4 @@
         });
     })
 </script>
-{% endblock javascripts %}
+{% endblock %}

@@ -139,8 +139,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     color: #555;
-    height: 30px;
-    line-height: 30px;
+    height: 20px;
+    line-height: 20px;
     display: block;
     vertical-align: middle;
     margin: 0 0 5px 0;
@@ -164,7 +164,7 @@
   .daterangepicker .calendar-time {
     text-align: center;
     margin: 5px auto;
-    line-height: 30px;
+    line-height: 20px;
     position: relative;
     padding-left: 28px; }
     .daterangepicker .calendar-time select.disabled {
@@ -258,7 +258,7 @@
       .daterangepicker.rtl .ranges, .daterangepicker.rtl .calendar {
         text-align: right;
         float: right; } }
-@media (min-width: 730px) {
+@media (min-width: 720px) {
   .daterangepicker .ranges {
     width: auto; }
   .daterangepicker.ltr .ranges {

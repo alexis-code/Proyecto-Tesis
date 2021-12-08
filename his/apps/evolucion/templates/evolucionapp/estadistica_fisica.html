@@ -7,6 +7,24 @@
 <div class="content">
     <div class="row">
         <div class="card">
+            {% if messages %}
+    <div class="row">
+        <div class="col">
+            {% for message in messages %}
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger fade show" role="alert">
+                {% else %}
+                <div class="alert alert-success fade show" role="alert">
+                {% endif %}
+                <strong>{{message}}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <i class="tim-icons icon-simple-remove"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
             <div class="card-header">
                 <div class="row">
                     <h4>Control de Estadistica de Examenes Físicos</h4>

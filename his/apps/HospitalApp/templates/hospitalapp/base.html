@@ -35,10 +35,12 @@
   <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
   <!-- CSS Files -->
   <link href="{% static 'assets/css/black-dashboard.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/jquery-confirm.min.css' %}" rel="stylesheet" />
   <link href="{% static 'assets/datatable/datatables.min.css' %}" rel="stylesheet" />
   <link href="{% static 'assets/jquery-ui-1.12.1.custom/jquery.css' %}" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="{% static 'assets/css/micss.css' %}" rel="stylesheet" />
+  
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
 
@@ -53,16 +55,18 @@
 
       {% include 'includes/navigation.html' %}
 
-      <div class="content">
+      <div class="content" style="background-image: url({% static 'loginapp/images/hospital-fachada.jpg' %});">
 
         {% block content %}
         <div class="container">
-          <h3>Bienvenido {{user.first_name}}</h3>
+            <div class="alert alert-default" role="alert">
+              <p style="color: seashell; font-size: x-large;" >Bienvenido {{user.first_name}}</p>
+            </div>
           <div class="row">
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Total Pacientes</h4>
+                  <h4>Total Pacientes</h4>
                   <h1 class="card-title"><i class="tim-icons icon-single-02 text-primary"></i>{{total_pacientes}}</h1>
                 </div>
               </div>
@@ -70,7 +74,7 @@
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Total Historias Clínicas</h4>
+                  <h4>Total Historias Clínicas</h4>
                   <h1 class="card-title"><i class="tim-icons icon-badge text-primary"></i>{{total_hc}} +</h1>
                 </div>
               </div>
@@ -78,7 +82,7 @@
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Total Historias Clínicas Activas</h4>
+                  <h4>Total Historias Clínicas Activas</h4>
                   <h1 class="card-title"><i class="tim-icons icon-badge text-primary"></i>{{total_hc_activas}} +</h1>
                 </div>
               </div>
@@ -88,7 +92,7 @@
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Pacientes Vacunados</h4>
+                  <h4>Pacientes Vacunados</h4>
                   <h1 class="card-title"><i class="tim-icons icon-single-02 text-primary"></i>{{total_pacientes_si}} +</h1>
                 </div>
               </div>
@@ -96,7 +100,7 @@
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Pacientes No Vacunados</h4>
+                  <h4>Pacientes No Vacunados</h4>
                   <h1 class="card-title"><i class="tim-icons icon-single-02 text-primary"></i>{{total_pacientes_no}} +</h1>
                 </div>
               </div>
@@ -104,7 +108,7 @@
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Pacientes 1° Dosis</h4>
+                  <h4>Pacientes 1° Dosis</h4>
                   <h1 class="card-title"><i class="tim-icons icon-single-02 text-primary"></i>{{total_pacientes_primera}} +
                   </h1>
                 </div>
@@ -115,7 +119,7 @@
             <div class="col-lg-4">
               <div class="card card-chart">
                 <div class="card-header">
-                  <h4 class="card-category">Pacientes 2° Dosis</h4>
+                  <h4>Pacientes 2° Dosis</h4>
                   <h1 class="card-title"><i class="tim-icons icon-single-02 text-primary"></i>{{total_pacientes_segunda}} +
                   </h1>
                 </div>

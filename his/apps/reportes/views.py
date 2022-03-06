@@ -34,6 +34,7 @@ class GenerarEstadistica(LoginRequiredMixin,PermissionRequiredMixin,View):
                 #cursor para obtener la cantidad de Historias clinicas por més
                 cursor_hc.execute(script_hc)
                 result = dictfetchall(cursor_hc)
+                print(result)
                 data_mes_hc = []
                 data_cantidad_hc = []
                 cantidad = len(result)

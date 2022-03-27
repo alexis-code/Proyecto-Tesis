@@ -14,9 +14,9 @@ ALLOWED_HOSTS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_his_test',
+        'NAME': config("NAME_DBPRUEBA"),
         'USER': 'root',
-        'PASSWORD': '$3Rv3r16',
+        'PASSWORD': config("PSSWD_DBPRUEBA"),
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
